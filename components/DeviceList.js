@@ -1,8 +1,30 @@
 import React, { Component } from 'react'
-import { View, Text } from 'react-native'
+import { connect } from 'react-redux'
+import { ListView, View, Text } from 'react-native'
+
+import { getUserInfo } from '../actions'
 
 class DeviceList extends Component {
+    componentWillMount() {
+        const { user_id, token } = this.props.user
+        this.props.getUserInfo(user_id, token)
+        this.createDataSource(this.props)
+    }
+
+    componentWillReceiveProps(nextProps) {
+        this.createDataSource(nextProps)
+    }
+
+    createDataSource({ devices }) {
+        const ds = new ListView.DataSource({
+            rowHasChanged: (r1, r2) => r1 !== r2
+        })
+        
+        this.dataSource = ds.cloneWithRows(this.props.userInfo.devices)
+    }
+
     render() {
+        console.log('devices: ', this.props.userInfo)
         return (
             <View>
                 <Text>Device 1</Text>
@@ -13,4 +35,11 @@ class DeviceList extends Component {
     }
 }
 
-export default DeviceList
+const mapStateToProps = (state) => {
+    return {
+        user: state.auth.user,   
+        userInfo: state.userInfo
+    }
+}
+
+export default connect(mapStateToProps, { getUserInfo })(DeviceList)

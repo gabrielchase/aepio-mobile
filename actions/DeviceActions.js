@@ -3,8 +3,8 @@ import axios from 'axios'
 
 import { 
     LOAD_TRUE,
-    FETCH_DEVICES_SUCCESS,
-    FETCH_DEVICES_FAIL,
+    USER_INFO_SUCCESS,
+    USER_INFO_FAIL,
 } from './types'
 import { HOST_URL } from '../const'
 
@@ -20,15 +20,15 @@ function getHeaders(jwt) {
     return newHeaders
 }
 
-export const fetchDevices = (userId, jwt) => {
+export const getUserInfo = (userId, jwt) => {
     return async dispatch => {
         try {
             let newHeaders = getHeaders(jwt)
             const res = await axios.get(`${HOST_URL}/users/${userId}/`, newHeaders)
-            dispatch({ type: FETCH_DEVICES_SUCCESS, payload: res })
+            dispatch({ type: USER_INFO_SUCCESS, payload: res.data })
         } catch (err) {
             console.log('err: ', err)
-            dispatch({ type: FETCH_DEVICES_FAIL })
+            dispatch({ type: USER_INFO_FAIL })
         }
     }
 }
