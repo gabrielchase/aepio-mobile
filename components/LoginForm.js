@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { View, Text } from 'react-native'
+import { Actions } from 'react-native-router-flux'
 
 import { emailChanged, passwordChanged, loginUser } from '../actions'
 import { Button, Card, CardSection, Input, Spinner } from './common'
@@ -18,7 +19,7 @@ class LoginForm extends Component {
         const { email, password } = this.props
         this.props.loginUser({ email, password })
     }
-
+    
     renderError() {
         if (this.props.error) {
             return (
@@ -69,6 +70,11 @@ class LoginForm extends Component {
 
                 <CardSection>
                     {this.renderButton()}
+                </CardSection>
+                <CardSection>
+                    <Button onPress={() => Actions.register()}>
+                        Register
+                    </Button>
                 </CardSection>
             </Card>
         )
