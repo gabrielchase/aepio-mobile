@@ -1,9 +1,11 @@
 import React, { Component } from 'react'
-import { Card, CardSection, Input, Button } from 'aepio-client/components/common'
+import { Text, View } from 'react-native';
+import { Button, Card, CardSection, Input } from './common'
+
 
 class LoginForm extends Component {
     render() {
-        return(
+        return (
             <Card>
                 <CardSection>
                     <Input 

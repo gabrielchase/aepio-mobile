@@ -3,9 +3,9 @@ import { Provider } from 'react-redux';
 import { createStore, applyMiddleware } from 'redux';
 import { StyleSheet, Text, View } from 'react-native';
 
-import LoginForm from 'aepio-client/components/LoginForm';
+import reducers from './reducers';
+import LoginForm from './components/LoginForm';
 
-import reducers from 'aepio-client/reducers';
 
 class App extends Component {
   render() {
