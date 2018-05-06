@@ -7,10 +7,16 @@ import {
     LOGIN_USER_SUCCESS,
     LOGIN_USER_FAIL,
     LOAD_TRUE,
-    REGISTER_USER,
+    REGISTER_USER_SUCCESS,
+    REGISTER_USER_FAIL
 } from './types'
 import { HOST_URL } from '../const'
 
+let headers = {
+    "headers": {
+      'Content-Type': 'application/json',
+    }
+}
 
 export const emailChanged = (text) => {
     return {
@@ -38,15 +44,43 @@ export const loginUser = ({ email, password }) => {
             dispatch({ type: LOGIN_USER_SUCCESS, payload: res })
             Actions.main()
         } catch(err) {
-            console.log(err)
+            console.log('Login failed: ', err)
             dispatch({ type: LOGIN_USER_FAIL })
         }
     }
 }
 
-export const registerUser = ({ prop, value }) => {
-    return {
-        type: REGISTER_USER,
-        payload: { prop, value }
+export const registerUser = ({ email, password, firstName, lastName, contacts }) => {
+    return async dispatch => {
+        dispatch({ type: LOAD_TRUE })
+
+        let contactsObj = {}
+        for (let contact of contacts) {
+            let splitContact = contact.split(':')
+            // console.log(splitContact)
+            let name = splitContact[0]
+            let number = splitContact[1]
+            // console.log('number: ', number)
+            contactsObj[name] = number
+        }
+        
+        const newUserInstance = {
+            email: email, 
+            first_name: firstName, 
+            last_name: lastName,
+            password: password,
+            details: {
+                contacts: contactsObj
+            }
+        }
+
+        try {
+            const res = await axios.post(`${HOST_URL}/users/`, JSON.stringify(newUserInstance), headers)
+            dispatch({ type: REGISTER_USER_SUCCESS, payload: res })
+            Actions.login()
+        } catch (err) {
+            console.log('Registration failed: ', err)
+            dispatch({ type: REGISTER_USER_FAIL })
+        }
     }
 }
