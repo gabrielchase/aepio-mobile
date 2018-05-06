@@ -1,0 +1,1 @@
+export const HOST_URL = 'https://aepio.herokuapp.com/api'
