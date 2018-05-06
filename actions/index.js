@@ -6,7 +6,8 @@ import {
     PASSWORD_CHANGED,
     LOGIN_USER_SUCCESS,
     LOGIN_USER_FAIL,
-    LOGIN_USER
+    LOAD_TRUE,
+    REGISTER_USER,
 } from './types'
 import { HOST_URL } from '../const'
 
@@ -27,7 +28,7 @@ export const passwordChanged = (text) => {
 
 export const loginUser = ({ email, password }) => {
     return async dispatch => {
-        dispatch({ type: LOGIN_USER })
+        dispatch({ type: LOAD_TRUE })
         const url = `${HOST_URL}/login/` 
         try {
             const res = await axios.post(url, {
@@ -40,5 +41,12 @@ export const loginUser = ({ email, password }) => {
             console.log(err)
             dispatch({ type: LOGIN_USER_FAIL })
         }
+    }
+}
+
+export const registerUser = ({ prop, value }) => {
+    return {
+        type: REGISTER_USER,
+        payload: { prop, value }
     }
 }
