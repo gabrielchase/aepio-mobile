@@ -1,3 +1,6 @@
+import { Actions } from 'react-native-router-flux'
+import axios from 'axios'
+
 import { 
     EMAIL_CHANGED, 
     PASSWORD_CHANGED,
@@ -7,7 +10,6 @@ import {
 } from './types'
 import { HOST_URL } from '../const'
 
-import axios from 'axios'
 
 export const emailChanged = (text) => {
     return {
@@ -33,6 +35,7 @@ export const loginUser = ({ email, password }) => {
                 password: password
             })
             dispatch({ type: LOGIN_USER_SUCCESS, payload: res })
+            Actions.deviceList()
         } catch(err) {
             dispatch({ type: LOGIN_USER_FAIL })
         }
