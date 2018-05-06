@@ -20,11 +20,10 @@ class DeviceList extends Component {
             rowHasChanged: (r1, r2) => r1 !== r2
         })
         
-        this.dataSource = ds.cloneWithRows(this.props.userInfo.devices)
+        this.dataSource = ds.cloneWithRows(this.props.userInfo)
     }
 
     render() {
-        console.log('devices: ', this.props.userInfo)
         return (
             <View>
                 <Text>Device 1</Text>
