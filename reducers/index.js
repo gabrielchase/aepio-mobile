@@ -1,9 +1,9 @@
 import { combineReducers } from 'redux'
 
 import AuthReducer from './AuthReducer'
-import UserInfoReducer from './UserInfoReducer'
+import DeviceReducer from './DeviceReducer'
 
 export default combineReducers({
     auth: AuthReducer,
-    userInfo: UserInfoReducer
+    devices: DeviceReducer
 })

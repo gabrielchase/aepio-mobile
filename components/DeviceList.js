@@ -2,12 +2,14 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { ListView, View, Text } from 'react-native'
 
-import { getUserInfo } from '../actions'
+import { CardSection } from './common'
+import { fetchDevices } from '../actions'
+import ListItem from './ListItem'
 
 class DeviceList extends Component {
     componentWillMount() {
         const { user_id, token } = this.props.user
-        this.props.getUserInfo(user_id, token)
+        this.props.fetchDevices(user_id, token)
         this.createDataSource(this.props)
     }
 
@@ -16,19 +18,30 @@ class DeviceList extends Component {
     }
 
     createDataSource({ devices }) {
+        console.log('createDataSource: ', devices)
         const ds = new ListView.DataSource({
             rowHasChanged: (r1, r2) => r1 !== r2
         })
         
-        this.dataSource = ds.cloneWithRows(this.props.userInfo)
+        this.dataSource = ds.cloneWithRows(devices)
+    }
+
+    renderRow(device) {
+        return <ListItem device={device} />
     }
 
     render() {
+        const { user } = this.props
         return (
             <View>
-                <Text>Device 1</Text>
-                <Text>Device 2</Text>
-                <Text>Device 3</Text>
+                <CardSection>
+                    <Text> Welcome {user.email}</Text>
+                </CardSection>
+                <ListView
+                    enableEmptySections
+                    dataSource={this.dataSource}
+                    renderRow={this.renderRow}
+                />
             </View>
         )
     }
@@ -37,8 +50,8 @@ class DeviceList extends Component {
 const mapStateToProps = (state) => {
     return {
         user: state.auth.user,   
-        userInfo: state.userInfo
+        devices: state.devices
     }
 }
 
-export default connect(mapStateToProps, { getUserInfo })(DeviceList)
+export default connect(mapStateToProps, { fetchDevices })(DeviceList)

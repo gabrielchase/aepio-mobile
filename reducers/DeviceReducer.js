@@ -1,14 +1,13 @@
 import {
-    USER_INFO_SUCCESS,
-    USER_INFO_FAIL
+    FETCH_DEVICES_SUCCESS,
+    FETCH_DEVICES_FAIL
 } from '../actions/types'
 
 const INITIAL_STATE = []
 
 export default (state=INITIAL_STATE, action) => {
     switch (action.type) {
-        case USER_INFO_SUCCESS:
-            console.log(action.payload)
+        case FETCH_DEVICES_SUCCESS:
             return action.payload
         default: 
             return state
