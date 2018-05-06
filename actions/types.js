@@ -6,3 +6,5 @@ export const LOAD_TRUE = 'load_true'
 export const REGISTER_USER_SUCCESS = 'register_user_success'
 export const REGISTER_USER_FAIL = 'register_user_fail'
 
+export const FETCH_DEVICES_SUCCESS = 'fetch_devices_success'
+export const FETCH_DEVICES_FAIL = 'fetch_devices_fail'
