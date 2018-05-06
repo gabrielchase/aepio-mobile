@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
+import { createStore } from 'redux';
 import { Provider } from 'react-redux';
-import { createStore, applyMiddleware } from 'redux';
 import { StyleSheet, Text, View } from 'react-native';
 
 import reducers from './reducers';
