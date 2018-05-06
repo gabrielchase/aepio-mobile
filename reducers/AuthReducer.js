@@ -27,7 +27,7 @@ export default (state=INITIAL_STATE, action) => {
             console.log(`Login succeeded with ${email}\nUser id: ${user_id}`)
             return { ...state, ...INITIAL_STATE, user: action.payload.data }
         case LOGIN_USER_FAIL:
-            console.log('Login failed')
+            console.log('Authentication failed')
             return { ...state, error: 'Authentication Failed', loading: false }
         default: 
             return state

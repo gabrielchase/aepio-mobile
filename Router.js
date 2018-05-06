@@ -7,9 +7,13 @@ import DeviceList from './components/DeviceList'
 const RouterComponent = () => {
     return (
         <Router>
-            <Stack key="root">
-                <Scene key="login" component={LoginForm} title="Please Login" initial />
-                <Scene key="deviceList" component={DeviceList} title="Device List" />
+            <Stack key="root" hideNavBar>
+                <Stack key="auth">
+                    <Scene key="login" component={LoginForm} title="Please Login" initial />
+                </Stack>
+                <Stack key="main">
+                    <Scene key="deviceList" component={DeviceList} title="Device List" />
+                </Stack>
             </Stack>
         </Router>
     )

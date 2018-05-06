@@ -35,8 +35,9 @@ export const loginUser = ({ email, password }) => {
                 password: password
             })
             dispatch({ type: LOGIN_USER_SUCCESS, payload: res })
-            Actions.deviceList()
+            Actions.main()
         } catch(err) {
+            console.log(err)
             dispatch({ type: LOGIN_USER_FAIL })
         }
     }
