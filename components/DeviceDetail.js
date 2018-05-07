@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { Text, View } from 'react-native'
 
-import { CardSection } from './common'
+import { Card, CardSection } from './common'
 import { fetchDevice } from '../actions'
 
 class DeviceDetail extends Component {
@@ -12,10 +12,39 @@ class DeviceDetail extends Component {
         this.props.fetchDevice(deviceId, token)
     }
 
+    renderReadings(readings) {
+        let renderReadings = []
+        for (let reading of readings) {
+            renderReadings.push(
+                <Card key={reading.id}>
+                    <CardSection>
+                        <Text>Timestamp: {reading.timestamp}</Text>
+                    </CardSection>
+                    
+                    <CardSection>
+                        <Text>LPG: {reading.lpg}</Text>
+                    </CardSection>
+                    
+                    <CardSection>
+                        <Text>CO: {reading.co}</Text>
+                    </CardSection>
+                    
+                    <CardSection>
+                        <Text>SMOKE: {reading.smoke}</Text>
+                    </CardSection>
+                </Card>
+            )
+        }
+        return renderReadings
+    }
+
     render() {
+        const { id, name, readings } = this.props.currentDevice
         return (
             <View>
                 <Text> Device Detail </Text>
+                <Text> {name} </Text>
+                {readings ? this.renderReadings(readings) : <Card></Card>}
             </View>
         )
     }
@@ -24,7 +53,7 @@ class DeviceDetail extends Component {
 const mapStateToProps = (state) => {
     return {
         user: state.auth.user,
-        currentDevice: state.auth.currentDevice
+        currentDevice: state.currentDevice
     }
 }
 

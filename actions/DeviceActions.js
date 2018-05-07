@@ -40,7 +40,6 @@ export const fetchDevice = (deviceId, jwt) => {
         try {
             let newHeaders = getHeaders(jwt)
             const res = await axios.get(`${HOST_URL}/devices/${deviceId}/`, newHeaders)
-            console.log(res.data)
             dispatch({ type: FETCH_DEVICE_SUCCESS, payload: res.data })
         } catch (err) {
             console.log('err: ', err)
