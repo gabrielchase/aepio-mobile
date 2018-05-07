@@ -4,12 +4,19 @@ import { Text, View } from 'react-native'
 
 import { Card, CardSection } from './common'
 import { fetchDevice } from '../actions'
+import { READING_INTERVAL } from '../const'
 
 class DeviceDetail extends Component {
     componentWillMount() {
         const deviceId  = this.props.deviceId
         const { token } = this.props.user
         this.props.fetchDevice(deviceId, token)
+    }
+
+    componentDidMount() {
+        const deviceId  = this.props.deviceId
+        const { token } = this.props.user
+        this.timer = setInterval(() => this.props.fetchDevice(deviceId, token), READING_INTERVAL)
     }
 
     renderReadings(readings) {
