@@ -5,6 +5,8 @@ import {
     LOAD_TRUE,
     FETCH_DEVICES_SUCCESS,
     FETCH_DEVICES_FAIL,
+    FETCH_DEVICE_SUCCESS,
+    FETCH_DEVICE_FAIL,
 } from './types'
 import { HOST_URL } from '../const'
 
@@ -29,6 +31,20 @@ export const fetchDevices = (userId, jwt) => {
         } catch (err) {
             console.log('err: ', err)
             dispatch({ type: FETCH_DEVICES_FAIL })
+        }
+    }
+}
+
+export const fetchDevice = (deviceId, jwt) => {
+    return async dispatch => {
+        try {
+            let newHeaders = getHeaders(jwt)
+            const res = await axios.get(`${HOST_URL}/devices/${deviceId}/`, newHeaders)
+            console.log(res.data)
+            dispatch({ type: FETCH_DEVICE_SUCCESS, payload: res.data })
+        } catch (err) {
+            console.log('err: ', err)
+            dispatch({ type: FETCH_DEVICE_FAIL })
         }
     }
 }

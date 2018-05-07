@@ -8,3 +8,5 @@ export const REGISTER_USER_FAIL = 'register_user_fail'
 
 export const FETCH_DEVICES_SUCCESS = 'fetch_devices_success'
 export const FETCH_DEVICES_FAIL = 'fetch_devices_fail'
+export const FETCH_DEVICE_SUCCESS = 'fetch_device_success'
+export const FETCH_DEVICE_FAIL = 'fetch_device_fail'
