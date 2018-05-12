@@ -1,10 +1,11 @@
-import React, { Component } from 'react';
-import { createStore, applyMiddleware } from 'redux';
-import { Provider } from 'react-redux';
+import React, { Component } from 'react'
+import { createStore, applyMiddleware } from 'redux'
+import { Provider } from 'react-redux'
 import ReduxThunk from 'redux-thunk'
+import { Permissions, Notifications } from 'expo'
 
-import reducers from './reducers';
-import LoginForm from './components/LoginForm';
+import reducers from './reducers'
+import LoginForm from './components/LoginForm'
 import Router from './Router'
 
 class App extends Component {
