@@ -32,6 +32,7 @@ export default (state=INITIAL_STATE, action) => {
             console.log('Authentication failed')
             return { ...state, error: 'Authentication Failed', loading: false }
         case REGISTER_USER_SUCCESS:
+            console.log('Successfuly registered: ', action.payload.data)
             return { ...state, loading: false}
         case REGISTER_USER_FAIL: 
             return { ...state, error: 'Registration Failed', loading: false }

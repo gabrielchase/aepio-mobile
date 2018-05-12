@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { registerUser } from '../actions'
 import { View, Text } from 'react-native'
+import { Permissions, Notifications } from 'expo'
 
 import { Button, Card, CardSection, Input, Spinner } from './common'
 
@@ -14,8 +15,38 @@ class RegisterForm extends Component {
             firstName: '',
             lastName: '',
             password: '',
-            contacts: []
+            contacts: [],
+            expo_token: ''
         }
+    }
+
+    componentWillMount() {
+        this.registerForPushNotification()
+    }
+
+    async registerForPushNotification() {
+        console.log('here')
+        const { status: existingStatus } = await Permissions.getAsync(Permissions.NOTIFICATIONS)
+        let finalStatus = existingStatus
+        console.log(finalStatus)
+        
+        // only ask if permissions have not already been determined, because
+        // iOS won't necessarily prompt the user a second time.
+        if (existingStatus !== 'granted') {
+            // Android remote notification permissions are granted during the app
+            // install, so this will only ask on iOS
+            const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS)
+            finalStatus = status
+        }
+        
+        // Stop here if the user did not grant permissions
+        if (finalStatus !== 'granted') {
+            return
+        }
+        
+        // Get the token that uniquely identifies this dsevice
+        let expo_token = await Notifications.getExpoPushTokenAsync()
+        this.setState({ expo_token: expo_token })
     }
 
     setDetailKey({ key }, text) {
@@ -31,9 +62,9 @@ class RegisterForm extends Component {
     }
     
     onRegisterPress() {
-        const { email, password, firstName, lastName, contacts } = this.state
-        this.props.registerUser({ email, password, firstName, lastName, contacts })
-        this.setState({ email: '', password: '', firstName: '', lastName: '', contacts: [] })
+        const { email, password, firstName, lastName, contacts, expo_token } = this.state
+        this.props.registerUser({ email, password, firstName, lastName, contacts, expo_token })
+        this.setState({ email: '', password: '', firstName: '', lastName: '', contacts: [], expo_token: '' })
     }
 
     renderError() {

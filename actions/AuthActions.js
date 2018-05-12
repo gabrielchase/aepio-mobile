@@ -50,7 +50,7 @@ export const loginUser = ({ email, password }) => {
     }
 }
 
-export const registerUser = ({ email, password, firstName, lastName, contacts }) => {
+export const registerUser = ({ email, password, firstName, lastName, contacts, expo_token }) => {
     return async dispatch => {
         dispatch({ type: LOAD_TRUE })
 
@@ -68,7 +68,8 @@ export const registerUser = ({ email, password, firstName, lastName, contacts })
             last_name: lastName,
             password: password,
             details: {
-                contacts: contactsObj
+                contacts: contactsObj,
+                expo_token: expo_token
             }
         }
 
