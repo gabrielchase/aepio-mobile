@@ -72,9 +72,10 @@ class EditForm extends Component {
     
     onUpdatePress() {
         const { user_id, token } = this.props.user
+        const { expo_token } = this.props.user_info
         const { email, password, first_name, last_name, contacts } = this.state
-        this.props.updateUser(email, password, first_name, last_name, contacts, user_id, token)
-        this.props.registerUser({ email, password, firstName, lastName, contacts, expo_token })
+        
+        this.props.updateUser(email, password, first_name, last_name, contacts, expo_token, user_id, token)
         this.setState({ email: '', password: '', firstName: '', lastName: '', contacts: [], expo_token: '' })
     }
 
