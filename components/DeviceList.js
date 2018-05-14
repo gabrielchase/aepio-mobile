@@ -48,7 +48,7 @@ class DeviceList extends Component {
 
 const mapStateToProps = (state) => {
     return {
-        user: state.auth.user,   
+        user: state.auth.user,
         devices: state.devices
     }
 }
