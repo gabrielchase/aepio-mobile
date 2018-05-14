@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { getUserInfo } from '../actions'
+import { getUserInfo, updateUser } from '../actions'
 import { View, Text } from 'react-native'
 
 import { Button, Card, CardSection, Input, Spinner } from './common'
@@ -10,13 +10,29 @@ class EditForm extends Component {
         super(props)
         this.state = {
             numberOfContacts: 1,
-            contacts: []
+            contacts: [],
+            email: '',
+            first_name: '',
+            last_name: '',
+            password: ''
         }
     }
     async componentWillMount() {
         const { user_id, token } = this.props.user
         await this.props.getUserInfo(user_id, token)
-        this.setState({ numberOfContacts: Object.keys(this.props.user_info.details.contacts).length })
+
+        const { email, first_name, last_name } = this.props.user_info
+
+        this.setState({ email: email, first_name: first_name, last_name: last_name})
+
+        let contacts = this.props.user_info.details.contacts
+        let updatedContacts = []
+        
+        this.setState({ numberOfContacts: Object.keys(contacts).length })
+        for (let key in contacts) {
+            updatedContacts.push(`${key}:${contacts[key]}`)
+        }
+        this.setState({ contacts: updatedContacts })
     }
 
     async registerForPushNotification() {
@@ -55,10 +71,11 @@ class EditForm extends Component {
     }
     
     onUpdatePress() {
-        console.log(this.state.contacts)
-        // const { email, password, firstName, lastName, contacts, expo_token } = this.state
-        // this.props.registerUser({ email, password, firstName, lastName, contacts, expo_token })
-        // this.setState({ email: '', password: '', firstName: '', lastName: '', contacts: [], expo_token: '' })
+        const { user_id, token } = this.props.user
+        const { email, password, first_name, last_name, contacts } = this.state
+        this.props.updateUser(email, password, first_name, last_name, contacts, user_id, token)
+        this.props.registerUser({ email, password, firstName, lastName, contacts, expo_token })
+        this.setState({ email: '', password: '', firstName: '', lastName: '', contacts: [], expo_token: '' })
     }
 
     renderError() {
@@ -87,30 +104,30 @@ class EditForm extends Component {
 
     renderEditForm() {
         const { email, first_name, last_name, details } = this.props.user_info
-        
-        let contactNames = []
-        for (key in details.contacts) {
-            contactNames.push(key)
-        }
-        
         let contacts = []
-        for (let i = 0; i < this.state.numberOfContacts; i++) {
-            let contactNumber = details.contacts[contactNames[i]]
-            contacts.push(
-                <CardSection key={i}>
-                    <Input 
-                        onChangeText={(text) => this.setDetailKey({ key: i }, text)}
-                        placeholder="Name"
-                        value={contactNumber ? contactNames[i] : ''}
-                    />
-                    <Input 
-                        onChangeText={(text) => this.setDetailValue({ key: i }, text)}
-                        placeholder="Contact Number"
-                        value={contactNumber ? contactNumber : ''}
-                    />
-                </CardSection>
-            )
+        if (this.state.contacts.length) {
+            for (let i = 0; i < this.state.numberOfContacts; i++) {
+                let contact = this.state.contacts[i]
+                let splitContact = contact.split(':')
+                let name = splitContact[0]
+                let number = splitContact[1]
+                contacts.push(
+                    <CardSection key={i}>
+                        <Input 
+                            onChangeText={(text) => this.setDetailKey({ key: i }, text)}
+                            placeholder="Name"
+                            value={name}
+                        />
+                        <Input 
+                            onChangeText={(text) => this.setDetailValue({ key: i }, text)}
+                            placeholder="Contact Number"
+                            value={number}
+                        />
+                    </CardSection>
+                )
+            }   
         }
+        
         
         return (
             <View>
@@ -120,7 +137,8 @@ class EditForm extends Component {
                     <Input 
                         label="Email"
                         placeholder="user@email.com"
-                        value={email}
+                        value={this.state.email}
+                        onChangeText={(text) => this.setState({ email: text })}
                     />
                 </CardSection>
                 
@@ -128,7 +146,8 @@ class EditForm extends Component {
                     <Input 
                         label="First Name"
                         placeholder="Juan"
-                        value={first_name}
+                        value={this.state.first_name}
+                        onChangeText={(text) => this.setState({ first_name: text })}
                     />
                 </CardSection>
                 
@@ -136,7 +155,8 @@ class EditForm extends Component {
                     <Input 
                         label="Last Name"
                         placeholder="Luna"
-                        value={last_name}
+                        value={this.state.last_name}
+                        onChangeText={(text) => this.setState({ last_name: text })}
                     />
                 </CardSection>
                 
@@ -145,6 +165,7 @@ class EditForm extends Component {
                         secureTextEntry
                         label="Password"
                         placeholder="********"
+                        onChangeText={(text) => this.setState({ password: text })}
                     />
                 </CardSection>
 
@@ -195,4 +216,4 @@ const mapStateToProps = (state) => {
     }
 }
 
-export default connect(mapStateToProps, { getUserInfo })(EditForm)
+export default connect(mapStateToProps, { getUserInfo, updateUser })(EditForm)
