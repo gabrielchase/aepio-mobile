@@ -72,11 +72,10 @@ class EditForm extends Component {
     
     onUpdatePress() {
         const { user_id, token } = this.props.user
-        const { expo_token } = this.props.user_info
+        const { expo_token } = this.props.user_info.details
         const { email, password, first_name, last_name, contacts } = this.state
-        
+
         this.props.updateUser(email, password, first_name, last_name, contacts, expo_token, user_id, token)
-        this.setState({ email: '', password: '', firstName: '', lastName: '', contacts: [], expo_token: '' })
     }
 
     renderError() {
@@ -108,21 +107,24 @@ class EditForm extends Component {
         let contacts = []
         if (this.state.contacts.length) {
             for (let i = 0; i < this.state.numberOfContacts; i++) {
-                let contact = this.state.contacts[i]
-                let splitContact = contact.split(':')
-                let name = splitContact[0]
-                let number = splitContact[1]
+                let contact = this.state.contacts[i] 
+                let name, number
+                if (contact) {
+                    splitContact = contact.split(':')
+                    name = splitContact[0]
+                    number = splitContact[1]
+                }
                 contacts.push(
                     <CardSection key={i}>
                         <Input 
                             onChangeText={(text) => this.setDetailKey({ key: i }, text)}
                             placeholder="Name"
-                            value={name}
+                            value={name ? name : ''}
                         />
                         <Input 
                             onChangeText={(text) => this.setDetailValue({ key: i }, text)}
                             placeholder="Contact Number"
-                            value={number}
+                            value={number ? number : ''}
                         />
                     </CardSection>
                 )
