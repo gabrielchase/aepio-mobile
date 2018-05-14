@@ -10,7 +10,8 @@ import {
     REGISTER_USER_SUCCESS,
     REGISTER_USER_FAIL,
     GET_USER_INFO,
-    UPDATE_USER_SUCCESS
+    UPDATE_USER_SUCCESS,
+    UPDATE_USER_FAIL 
 } from './types'
 import { HOST_URL } from '../const'
 
@@ -107,6 +108,7 @@ export const getUserInfo = (user_id, token) => {
 
 export const updateUser = (email, password, firstName, lastName, contacts, expo_token, user_id, token) => {
     return async dispatch => {
+        dispatch({ type: LOAD_TRUE })
         let contactsObj = {}
         for (let contact of contacts) {
             let splitContact = contact.split(':')
@@ -135,3 +137,9 @@ export const updateUser = (email, password, firstName, lastName, contacts, expo_
         }
     }
 }
+
+export const updateUserFail = () => {
+    return dispatch => {
+        dispatch({ type: UPDATE_USER_FAIL })
+    }
+}   

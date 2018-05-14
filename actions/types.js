@@ -7,6 +7,7 @@ export const REGISTER_USER_SUCCESS = 'register_user_success'
 export const REGISTER_USER_FAIL = 'register_user_fail'
 export const GET_USER_INFO = 'get_user_info'
 export const UPDATE_USER_SUCCESS = 'update_user_success'
+export const UPDATE_USER_FAIL = 'update_user_fail'
 
 export const FETCH_DEVICES_SUCCESS = 'fetch_devices_success'
 export const FETCH_DEVICES_FAIL = 'fetch_devices_fail'

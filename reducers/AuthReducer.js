@@ -7,7 +7,8 @@ import {
     REGISTER_USER_SUCCESS,
     REGISTER_USER_FAIL,
     GET_USER_INFO,
-    UPDATE_USER_SUCCESS
+    UPDATE_USER_SUCCESS,
+    UPDATE_USER_FAIL 
 } from '../actions/types'
 
 const INITIAL_STATE = { 
@@ -41,7 +42,9 @@ export default (state=INITIAL_STATE, action) => {
         case GET_USER_INFO:
             return { ...state, user_info: action.payload }
         case UPDATE_USER_SUCCESS:
-            return { ...state, user_info: action.payload }
+            return { ...state, user_info: action.payload, loading: false }
+        case UPDATE_USER_FAIL:
+            return { ...state, error: 'Update Failed. Make sure to fill out all fields', loading: false }
         default: 
             return state
     }

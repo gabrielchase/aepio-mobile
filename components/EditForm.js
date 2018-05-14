@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { getUserInfo, updateUser } from '../actions'
+import { getUserInfo, updateUser, updateUserFail } from '../actions'
 import { View, Text } from 'react-native'
 
 import { Button, Card, CardSection, Input, Spinner } from './common'
@@ -71,11 +71,15 @@ class EditForm extends Component {
     }
     
     onUpdatePress() {
-        const { user_id, token } = this.props.user
-        const { expo_token } = this.props.user_info.details
-        const { email, password, first_name, last_name, contacts } = this.state
-
-        this.props.updateUser(email, password, first_name, last_name, contacts, expo_token, user_id, token)
+        if (!this.state.password) {
+            this.props.updateUserFail()
+        } else {
+            const { user_id, token } = this.props.user
+            const { expo_token } = this.props.user_info.details
+            const { email, password, first_name, last_name, contacts } = this.state
+    
+            this.props.updateUser(email, password, first_name, last_name, contacts, expo_token, user_id, token)
+        }
     }
 
     renderError() {
@@ -219,4 +223,4 @@ const mapStateToProps = (state) => {
     }
 }
 
-export default connect(mapStateToProps, { getUserInfo, updateUser })(EditForm)
+export default connect(mapStateToProps, { getUserInfo, updateUser, updateUserFail })(EditForm)
