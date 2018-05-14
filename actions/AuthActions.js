@@ -98,7 +98,6 @@ export const getUserInfo = (user_id, token) => {
         const url = `${HOST_URL}/users/${user_id}/` 
         try {
             const res = await axios.get(url, getHeaders(token))
-            console.log(res.data)
             dispatch({ type: GET_USER_INFO, payload: res.data})
         } catch(err) {
             console.log('Getting user info failed: ', err)
