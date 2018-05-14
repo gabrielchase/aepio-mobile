@@ -52,7 +52,6 @@ export const loginUser = ({ email, password }) => {
             })
             dispatch({ type: LOGIN_USER_SUCCESS, payload: res })
             Actions.main()
-            Actions.userEditForm()
         } catch(err) {
             console.log('Login failed: ', err)
             dispatch({ type: LOGIN_USER_FAIL })

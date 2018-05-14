@@ -1,8 +1,9 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { ListView, View, Text } from 'react-native'
+import { Actions } from 'react-native-router-flux'
 
-import { CardSection } from './common'
+import { Button, CardSection } from './common'
 import { fetchDevices } from '../actions'
 import ListItem from './ListItem'
 
@@ -34,7 +35,14 @@ class DeviceList extends Component {
         return (
             <View>
                 <CardSection>
-                    <Text> Welcome {user.email}</Text>
+                    <Button onPress={() => Actions.userEditForm()}>
+                        Update Profile
+                    </Button>
+                </CardSection>
+                <CardSection>
+                    <Text> 
+                        Welcome {user.email}
+                    </Text>
                 </CardSection>
                 <ListView
                     enableEmptySections
