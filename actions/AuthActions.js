@@ -8,14 +8,21 @@ import {
     LOGIN_USER_FAIL,
     LOAD_TRUE,
     REGISTER_USER_SUCCESS,
-    REGISTER_USER_FAIL
+    REGISTER_USER_FAIL,
+    GET_USER_INFO
 } from './types'
 import { HOST_URL } from '../const'
 
-let headers = {
+const HEADERS = {
     "headers": {
       'Content-Type': 'application/json',
     }
+}
+
+function getHeaders(jwt) {
+    let newHeaders = Object.assign({}, HEADERS)
+    newHeaders['headers']['Authorization'] = `JWT ${jwt}`
+    return newHeaders
 }
 
 export const emailChanged = (text) => {
@@ -43,6 +50,7 @@ export const loginUser = ({ email, password }) => {
             })
             dispatch({ type: LOGIN_USER_SUCCESS, payload: res })
             Actions.main()
+            Actions.userEditForm()
         } catch(err) {
             console.log('Login failed: ', err)
             dispatch({ type: LOGIN_USER_FAIL })
@@ -74,12 +82,28 @@ export const registerUser = ({ email, password, firstName, lastName, contacts, e
         }
 
         try {
-            const res = await axios.post(`${HOST_URL}/users/`, JSON.stringify(newUserInstance), headers)
+            const res = await axios.post(`${HOST_URL}/users/`, JSON.stringify(newUserInstance), HEADERS)
             dispatch({ type: REGISTER_USER_SUCCESS, payload: res })
             Actions.login()
         } catch (err) {
             console.log('Registration failed: ', err)
             dispatch({ type: REGISTER_USER_FAIL })
         }
+    }
+}
+
+export const getUserInfo = (user_id, token) => {
+    return async dispatch => {
+        const url = `${HOST_URL}/users/${user_id}/` 
+        try {
+            const res = await axios.get(url, getHeaders(token))
+            console.log(res.data)
+            dispatch({ type: GET_USER_INFO, payload: res.data})
+            // Actions.main()
+            // Actions.userEditForm()
+        } catch(err) {
+            console.log('Getting user info failed: ', err)
+            // dispatch({ type: LOGIN_USER_FAIL })
+        }   
     }
 }

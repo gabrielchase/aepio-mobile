@@ -5,7 +5,8 @@ import {
     LOGIN_USER_FAIL,
     LOAD_TRUE,
     REGISTER_USER_SUCCESS,
-    REGISTER_USER_FAIL
+    REGISTER_USER_FAIL,
+    GET_USER_INFO
 } from '../actions/types'
 
 const INITIAL_STATE = { 
@@ -36,6 +37,8 @@ export default (state=INITIAL_STATE, action) => {
             return { ...state, loading: false}
         case REGISTER_USER_FAIL: 
             return { ...state, error: 'Registration Failed', loading: false }
+        case GET_USER_INFO:
+            return { ...state, user_info: action.payload }
         default: 
             return state
     }
