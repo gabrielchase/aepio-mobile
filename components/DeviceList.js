@@ -2,8 +2,9 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { ListView, View, Text, Dimensions, ActivityIndicator } from 'react-native'
 import { LinearGradient, Svg } from 'expo'
+import { Actions } from 'react-native-router-flux'
 
-import { CardSection } from './common'
+import { CardSection, Button } from './common'
 import { fetchDevices, fetchDevice } from '../actions'
 import ListItem from './ListItem'
 
@@ -62,8 +63,6 @@ class DeviceList extends Component {
 
         const deviceId = this.state.detail ? this.state.detail.id : 0
         let reading = this.state.detail ? this.state.detail.readings[0] : { lpg: 0 }
-        if (deviceId == 3) reading = { lpg: 44 }
-        if (deviceId == 2) reading = { lpg: 20 }
         const level = (reading.lpg <= 12 ? 'LOW' : reading.lpg <= 24 ? 'MEDIUM' : 'HIGH')
         const percentage = reading.lpg / 32
         const offset = h - (h * percentage)
@@ -102,6 +101,10 @@ class DeviceList extends Component {
                         dataSource={this.dataSource}
                         renderRow={this.renderRow}
                     />
+                    {/* TODO: Move this somewhere else (sidebar menu?) */}
+                    <Button onPress={() => Actions.userEditForm()}>
+                        Update Profile
+                    </Button>
                 </LinearGradient>
             </View>
         )
