@@ -5,25 +5,18 @@ import { LinearGradient, Svg } from 'expo'
 import { Actions } from 'react-native-router-flux'
 
 import { CardSection, Button } from './common'
-import { fetchDevices, fetchDevice } from '../actions'
+import { fetchDevices, fetchDevice, makeActiveDevice } from '../actions'
 import ListItem from './ListItem'
 
 class DeviceList extends Component {
-    constructor(props) {
-        super(props)
-        this.state = {}
-    }
-
     componentWillMount() {
         const { user_id, token } = this.props.user
         this.props.fetchDevices(user_id, token)
         this.createDataSource(this.props)
-        this.activateDevice(this.props.devices[0])
     }
 
     componentWillReceiveProps(nextProps) {
         this.createDataSource(nextProps)
-        this.activateDevice(this.props.devices[0])
     }
 
     createDataSource({ devices }) {
@@ -34,23 +27,16 @@ class DeviceList extends Component {
         this.dataSource = ds.cloneWithRows(devices)
     }
 
-    activateDevice = async (device) => {
-        this.setState({ loading: true, activeDevice: device })
-        fetchDevice(device, this.props.user.token)(response => {
-            this.setState({ loading: false, detail: response.payload, activeDevice: device })
-        })
-    }
-
     renderRow = (device) => {
-        const isActive = this.state.activeDevice === device
-        return <ListItem device={ device } active={ isActive } activate={ (device) => { this.activateDevice(device) } } />
+        return <ListItem device={ device } />
     }
 
     renderViz = () => {
+        const { id, name, recent_reading } = this.props.activeDevice
         const w = Dimensions.get('window').width
         const h = Dimensions.get('window').height
-
-        if (this.state.loading) {
+        
+        if (recent_reading === undefined) {
             return (
                 <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
                     <ActivityIndicator size={48} color='#D46047' />
@@ -61,30 +47,37 @@ class DeviceList extends Component {
             )
         }
 
-        // scaling/threshold constants
         const LOW = 750
         const MED = 1000
         const HIGH = 1250
         const MAX = 1250
-        const KEY = 'lpg'
 
-        const deviceId = this.state.detail ? this.state.detail.id : 0
-        let reading = this.state.detail ? this.state.detail.readings[0] : { lpg: 0, smoke: 0, co: 0 }
-        // if (deviceId == 3) reading = { lpg: 1000, smoke: 1000, co: 1000 }
-        // if (deviceId == 2) reading = { lpg: 1500, smoke: 1500, co: 1500 }
-        const level = (reading[KEY] <= LOW ? 'LOW' : reading[KEY] <= MED ? 'MED' : 'HIGH')
-        const percentage = reading[KEY] / MAX
+        const deviceId = this.props.activeDevice.id 
+        const level = (recent_reading['lpg'] <= LOW ? 'LOW' : recent_reading['lpg'] <= MED ? 'MED' : 'HIGH')
+        const percentage = recent_reading['lpg'] / MAX
         const offset = (h - (h * percentage)) / 2
 
         return (
             <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-                <Text style={{ color: '#D46047', fontSize: 16, fontWeight: '700' }}>Device {deviceId}</Text>
+                <Text style={{ color: '#D46047', fontSize: 16, fontWeight: '700' }}>Device {id}</Text>
                 <Text style={{ color: '#D46047', fontSize: 48, fontWeight: '200' }}>{level}</Text>
                 <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'baseline' }}>
                     <Text style={{ color: '#D46047', fontSize: 16, fontWeight: '900' }}>
-                        {reading[KEY]} ppm
+                        {recent_reading['lpg']} ppm
                     </Text>
-                    <Text style={{ color: '#D46047', fontSize: 13, fontWeight: '900', marginLeft: 4 }}>{KEY.toUpperCase()}</Text>
+                    <Text style={{ color: '#D46047', fontSize: 13, fontWeight: '900', marginLeft: 4 }}>LPG</Text>
+                </View>
+                <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'baseline' }}>
+                    <Text style={{ color: '#D46047', fontSize: 16, fontWeight: '900' }}>
+                        {recent_reading['co']} ppm
+                    </Text>
+                    <Text style={{ color: '#D46047', fontSize: 13, fontWeight: '900', marginLeft: 4 }}>CO</Text>
+                </View>
+                <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'baseline' }}>
+                    <Text style={{ color: '#D46047', fontSize: 16, fontWeight: '900' }}>
+                        {recent_reading['smoke']} ppm
+                    </Text>
+                    <Text style={{ color: '#D46047', fontSize: 13, fontWeight: '900', marginLeft: 4 }}>SMOKE</Text>
                 </View>
 
                 <Svg height={h} width={w} style={{ position: 'absolute', top: offset, left: 0, right: 0, zIndex: -100 }}>
@@ -101,10 +94,11 @@ class DeviceList extends Component {
     }
 
     render() {
+        const { activeDevice } = this.props
         return (
             <View style={{ flex: 1, flexDirection: 'column' }}>
                 { this.renderViz() }
-                <LinearGradient colors={["#D46047", "#EAB56B"]} style={{ flexGrow: 0, height: '33%', paddingTop: 24 }}>
+                <LinearGradient colors={["#D46047", "#EAB56B"]} style={{ flexGrow: 0, height: '45%', paddingTop: 24 }}>
                     <ListView
                         enableEmptySections
                         dataSource={this.dataSource}
@@ -123,8 +117,9 @@ class DeviceList extends Component {
 const mapStateToProps = (state) => {
     return {
         user: state.auth.user,
-        devices: state.devices
+        devices: state.devices,
+        activeDevice: state.activeDevice
     }
 }
 
-export default connect(mapStateToProps, { fetchDevices })(DeviceList)
+export default connect(mapStateToProps, { fetchDevices, makeActiveDevice })(DeviceList)
