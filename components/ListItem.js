@@ -1,23 +1,26 @@
 import React, { Component } from 'react'
 import { Text, TouchableNativeFeedback, View, StyleSheet } from 'react-native'
+import { connect } from 'react-redux'
 import { Actions } from 'react-native-router-flux'
 import { Ionicons } from '@expo/vector-icons'
 
+import { makeActiveDevice } from '../actions'
 import { CardSection } from './common'
 
 class ListItem extends Component {
     onRowPress() {
-        this.props.activate(this.props.device);
+        const { device } = this.props
+        this.props.makeActiveDevice(device)
         // Actions.deviceDetail({ deviceId: this.props.device })
     }
 
     render() {
-        const id = this.props.device
+        const { id, name } = this.props.device
 
         const rootContainerStyles = [styles.rootContainer, this.props.active ? styles.rootContainerActive : {}]
         const titleTextStyles = [styles.titleText, this.props.active ? styles.titleTextActive : {}]
         const subtitleTextStyles = [styles.subtitleText, this.props.active ? styles.subtitleTextActive : {}]
-
+        
         return (
             <TouchableNativeFeedback onPress={this.onRowPress.bind(this)}>
                 <View style={rootContainerStyles} pointerEvents='box-only'>
@@ -32,7 +35,7 @@ class ListItem extends Component {
                         <Ionicons name="md-more" size={24} color="white"/>
                     </View>
                 </View>
-            </TouchableNativeFeedback>
+            </TouchableNativeFeedback> 
         )
     }
 }
@@ -70,4 +73,4 @@ const styles = StyleSheet.create({
     },
 })
 
-export default ListItem
+export default connect(null, { makeActiveDevice })(ListItem)

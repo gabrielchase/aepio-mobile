@@ -7,6 +7,7 @@ import {
     FETCH_DEVICES_FAIL,
     FETCH_DEVICE_SUCCESS,
     FETCH_DEVICE_FAIL,
+    MAKE_ACTIVE_DEVICE
 } from './types'
 import { HOST_URL } from '../const'
 
@@ -45,5 +46,11 @@ export const fetchDevice = (deviceId, jwt) => {
             console.log('err: ', err)
             dispatch({ type: FETCH_DEVICE_FAIL })
         }
+    }
+}
+
+export const makeActiveDevice = (device) => {
+    return async dispatch => {
+        dispatch({ type: MAKE_ACTIVE_DEVICE, payload: device})
     }
 }
