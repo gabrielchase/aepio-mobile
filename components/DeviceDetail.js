@@ -48,6 +48,7 @@ class DeviceDetail extends Component {
     render() {
         const readings = this.props.currentDevice
         const { id, name } = this.props.activeDevice
+        console.log('reloading devicedetails ', id)
         const deviceId = id
 
         if (!readings.length) {
@@ -65,6 +66,7 @@ class DeviceDetail extends Component {
 
     componentWillUnmount() {
         clearInterval(this.timer)
+        console.log('unmounting devilcedetails')
     }
 }
 

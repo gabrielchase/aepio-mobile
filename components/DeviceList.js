@@ -7,6 +7,7 @@ import { Actions } from 'react-native-router-flux'
 import { CardSection, Button } from './common'
 import { fetchDevices, fetchDevice, makeActiveDevice } from '../actions'
 import ListItem from './ListItem'
+import { READING_INTERVAL } from '../const'
 
 class DeviceList extends Component {
     componentWillMount() {
@@ -17,6 +18,11 @@ class DeviceList extends Component {
 
     componentWillReceiveProps(nextProps) {
         this.createDataSource(nextProps)
+    }
+
+    componentDidMount() {
+        const { user_id, token } = this.props.user
+        this.timer = setInterval(() => this.props.fetchDevices(user_id, token), READING_INTERVAL)
     }
 
     createDataSource({ devices }) {
@@ -99,6 +105,7 @@ class DeviceList extends Component {
 
     render() {
         const { activeDevice } = this.props
+        console.log('reloading DeviceList')
         return (
             <View style={{ flex: 1, flexDirection: 'column' }}>
                 { this.renderViz() }
@@ -115,6 +122,11 @@ class DeviceList extends Component {
                 </LinearGradient>
             </View>
         )
+    }
+
+    componentWillUnmount() {
+        clearInterval(this.timer)
+        console.log('unmounting devicelist')
     }
 }
 
