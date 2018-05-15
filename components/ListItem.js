@@ -11,7 +11,6 @@ class ListItem extends Component {
     onRowPress() {
         const { device } = this.props
         this.props.makeActiveDevice(device)
-        // Actions.deviceDetail({ deviceId: this.props.device })
     }
 
     render() {

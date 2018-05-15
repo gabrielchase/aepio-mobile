@@ -79,6 +79,10 @@ class DeviceList extends Component {
                     </Text>
                     <Text style={{ color: '#D46047', fontSize: 13, fontWeight: '900', marginLeft: 4 }}>SMOKE</Text>
                 </View>
+                
+                <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'baseline' }}>
+                    <Button onPress={() => Actions.deviceDetail({ deviceId: deviceId })}> See History </Button>
+                </View>
 
                 <Svg height={h} width={w} style={{ position: 'absolute', top: offset, left: 0, right: 0, zIndex: -100 }}>
                     <Svg.Polygon points={`0,48 ${w},${w} ${w},${h} 0,${h} 0,${w}`} fill="#F3C57B" fillOpacity={0.5}/>
