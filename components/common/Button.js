@@ -1,36 +1,47 @@
 import React from 'react'
-import { Text, TouchableOpacity } from 'react-native'
+import { Text, TouchableNativeFeedback, View, ActivityIndicator } from 'react-native'
 
-const Button = ({ onPress, children }) => {
+const Button = ({ onPress, loading, children }) => {
   const { buttonStyle, textStyle } = styles
 
-  return (
-    <TouchableOpacity onPress={onPress} style={buttonStyle}>
+  let inner;
+  if (loading) {
+    inner = (
+      <ActivityIndicator size={32} color="#D46047" style={{ padding: 8 }}>
+      </ActivityIndicator>
+    );
+  } else {
+    inner = (
       <Text style={textStyle}>
         {children}
       </Text>
-    </TouchableOpacity>
+    );
+  }
+
+  return (
+    <TouchableNativeFeedback onPress={onPress}>
+      <View style={buttonStyle}>
+        { inner }
+      </View>
+    </TouchableNativeFeedback>
   )
 }
 
 const styles = {
   textStyle: {
     alignSelf: 'center',
-    color: '#007aff',
-    fontSize: 16,
+    color: '#D46047',
+    fontSize: 20,
     fontWeight: '600',
     paddingTop: 10,
     paddingBottom: 10
   },
   buttonStyle: {
-    flex: 1,
-    alignSelf: 'stretch',
+    height: 48,
+    marginTop: 8,
+    marginBottom: 8,
     backgroundColor: '#fff',
-    borderRadius: 5,
-    borderWidth: 1,
-    borderColor: '#007aff',
-    marginLeft: 5,
-    marginRight: 5
+    borderRadius: 50
   }
 }
 
