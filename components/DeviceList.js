@@ -61,11 +61,20 @@ class DeviceList extends Component {
             )
         }
 
+        // scaling/threshold constants
+        const LOW = 750
+        const MED = 1000
+        const HIGH = 1250
+        const MAX = 1250
+        const KEY = 'lpg'
+
         const deviceId = this.state.detail ? this.state.detail.id : 0
-        let reading = this.state.detail ? this.state.detail.readings[0] : { lpg: 0 }
-        const level = (reading.lpg <= 12 ? 'LOW' : reading.lpg <= 24 ? 'MEDIUM' : 'HIGH')
-        const percentage = reading.lpg / 32
-        const offset = h - (h * percentage)
+        let reading = this.state.detail ? this.state.detail.readings[0] : { lpg: 0, smoke: 0, co: 0 }
+        // if (deviceId == 3) reading = { lpg: 1000, smoke: 1000, co: 1000 }
+        // if (deviceId == 2) reading = { lpg: 1500, smoke: 1500, co: 1500 }
+        const level = (reading[KEY] <= LOW ? 'LOW' : reading[KEY] <= MED ? 'MED' : 'HIGH')
+        const percentage = reading[KEY] / MAX
+        const offset = (h - (h * percentage)) / 2
 
         return (
             <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
@@ -73,9 +82,9 @@ class DeviceList extends Component {
                 <Text style={{ color: '#D46047', fontSize: 48, fontWeight: '200' }}>{level}</Text>
                 <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'baseline' }}>
                     <Text style={{ color: '#D46047', fontSize: 16, fontWeight: '900' }}>
-                        {reading.lpg} ppm
+                        {reading[KEY]} ppm
                     </Text>
-                    <Text style={{ color: '#D46047', fontSize: 13, fontWeight: '900', marginLeft: 4 }}>LPG</Text>
+                    <Text style={{ color: '#D46047', fontSize: 13, fontWeight: '900', marginLeft: 4 }}>{KEY.toUpperCase()}</Text>
                 </View>
 
                 <Svg height={h} width={w} style={{ position: 'absolute', top: offset, left: 0, right: 0, zIndex: -100 }}>
