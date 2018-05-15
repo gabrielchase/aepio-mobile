@@ -46,21 +46,33 @@ class DeviceDetail extends Component {
     }
 
     render() {
-        const { id, name, readings } = this.props.currentDevice
+        const readings = this.props.currentDevice
+        const { id, name } = this.props.activeDevice
+        const deviceId = id
+
+        if (!readings.length) {
+            return (<View><Text></Text></View>)
+        }
+
         return (
             <View>
-                <Text> Device Detail </Text>
+                <Text> Device {deviceId} Readings </Text>
                 <Text> {name} </Text>
                 {readings ? this.renderReadings(readings) : <Card></Card>}
             </View>
         )
+    }
+
+    componentWillUnmount() {
+        clearInterval(this.timer)
     }
 }
 
 const mapStateToProps = (state) => {
     return {
         user: state.auth.user,
-        currentDevice: state.currentDevice
+        currentDevice: state.currentDevice,
+        activeDevice: state.activeDevice
     }
 }
 
