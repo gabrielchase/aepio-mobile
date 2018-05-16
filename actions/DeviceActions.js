@@ -29,7 +29,6 @@ export const fetchDevices = (userId, jwt) => {
             let newHeaders = getHeaders(jwt)
             const res = await axios.get(`${HOST_URL}/users/${userId}/`, newHeaders)
             dispatch({ type: FETCH_DEVICES_SUCCESS, payload: res.data.devices })
-            dispatch({ type: MAKE_ACTIVE_DEVICE, payload: res.data.devices[0] })
         } catch (err) {
             console.log('err: ', err)
             dispatch({ type: FETCH_DEVICES_FAIL })

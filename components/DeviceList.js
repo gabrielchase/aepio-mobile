@@ -1,7 +1,8 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { ListView, View, Text, Dimensions, ActivityIndicator } from 'react-native'
+import { ListView, View, Text, Dimensions, ActivityIndicator, TouchableNativeFeedback } from 'react-native'
 import { LinearGradient, Svg } from 'expo'
+import { Feather } from '@expo/vector-icons'
 import { Actions } from 'react-native-router-flux'
 
 import { CardSection, Button } from './common'
@@ -34,7 +35,9 @@ class DeviceList extends Component {
     }
 
     renderRow = (device) => {
-        return <ListItem device={ device } />
+        const { id } = this.props.activeDevice
+        const active = id == device.id
+        return <ListItem device={ device } active={ active }/>
     }
 
     renderViz = () => {
@@ -46,8 +49,8 @@ class DeviceList extends Component {
             return (
                 <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
                     <ActivityIndicator size={48} color='#D46047' />
-                    <Svg height={48} width={w} style={{ position: 'absolute', bottom: 0, left: 0, right: 0 }}>
-                        <Svg.Polygon points={`0,48 ${w},0 ${w},48`} fill="#D46047"/>
+                    <Svg height={64} width={w} style={{ position: 'absolute', bottom: 0, left: 0, right: 0 }}>
+                        <Svg.Polygon points={`0,64 ${w},0 ${w},64`} fill="#D46047"/>
                     </Svg>
                 </View>
             )
@@ -57,10 +60,12 @@ class DeviceList extends Component {
         const MED = 1000
         const HIGH = 1250
         const MAX = 1250
+        const KEY = 'lpg'
 
-        const deviceId = this.props.activeDevice.id 
-        const level = (recent_reading['lpg'] <= LOW ? 'LOW' : recent_reading['lpg'] <= MED ? 'MED' : 'HIGH')
-        const percentage = recent_reading['lpg'] / MAX
+        const level = (recent_reading[KEY] <= LOW ? 'LOW' : recent_reading[KEY] <= MED ? 'MED' : 'HIGH')
+        let percentage = recent_reading[KEY] / MAX
+        // cap percentage to an excess offset of 1.3
+        if (percentage > 1.3) percentage = 1.3
         const offset = (h - (h * percentage)) / 2
 
         return (
@@ -85,9 +90,11 @@ class DeviceList extends Component {
                     </Text>
                     <Text style={{ color: '#D46047', fontSize: 13, fontWeight: '900', marginLeft: 4 }}>SMOKE</Text>
                 </View>
-                
-                <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'baseline' }}>
-                    <Button onPress={() => Actions.deviceDetail({ deviceId: deviceId })}> See History </Button>
+
+                <View style={{ position: 'absolute', bottom: 24, right: 24, width: 64, height: 64, borderRadius: 32, overflow: 'hidden', backgroundColor: 'white', zIndex: 100 }}>
+                    <TouchableNativeFeedback onPress={() => Actions.deviceDetail({ deviceId: id })}>
+                        <View style={{ padding: 16 }}><Feather name="list" size={32} color="#D46047"/></View>
+                    </TouchableNativeFeedback>
                 </View>
 
                 <Svg height={h} width={w} style={{ position: 'absolute', top: offset, left: 0, right: 0, zIndex: -100 }}>
@@ -96,8 +103,8 @@ class DeviceList extends Component {
                     <Svg.Polygon points={`${w},0 ${w},${w/2} ${w},${h} 0,${h} 0,${w}`} fill="#DB735C" fillOpacity={0.5}/>
                 </Svg>
 
-                <Svg height={48} width={w} style={{ position: 'absolute', bottom: 0, left: 0, right: 0 }}>
-                    <Svg.Polygon points={`0,48 ${w},0 ${w},48`} fill="#D46047"/>
+                <Svg height={64} width={w} style={{ position: 'absolute', bottom: 0, left: 0, right: 0 }}>
+                    <Svg.Polygon points={`0,64 ${w},0 ${w},64`} fill="#D46047"/>
                 </Svg>
             </View>
         )
@@ -105,20 +112,20 @@ class DeviceList extends Component {
 
     render() {
         const { activeDevice } = this.props
-        console.log('reloading DeviceList')
         return (
             <View style={{ flex: 1, flexDirection: 'column' }}>
+                <View style={{ position: 'absolute', top: 36, right: 12, width: 64, height: 64, borderRadius: 32, overflow: 'hidden', backgroundColor: 'white', zIndex: 100 }}>
+                    <TouchableNativeFeedback onPress={() => Actions.userEditForm()}>
+                        <View style={{ padding: 19 }}><Feather name="settings" size={24} color="#D46047"/></View>
+                    </TouchableNativeFeedback>
+                </View>
                 { this.renderViz() }
-                <LinearGradient colors={["#D46047", "#EAB56B"]} style={{ flexGrow: 0, height: '45%', paddingTop: 24 }}>
+                <LinearGradient colors={["#D46047", "#EAB56B"]} style={{ flexGrow: 0, height: '33%', paddingTop: 12 }}>
                     <ListView
                         enableEmptySections
                         dataSource={this.dataSource}
                         renderRow={this.renderRow}
                     />
-                    {/* TODO: Move this somewhere else (sidebar menu?) */}
-                    <Button onPress={() => Actions.userEditForm()}>
-                        Update Profile
-                    </Button>
                 </LinearGradient>
             </View>
         )

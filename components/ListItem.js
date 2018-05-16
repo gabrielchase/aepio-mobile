@@ -30,9 +30,6 @@ class ListItem extends Component {
                         <Text style={titleTextStyles}>Device {id}</Text>
                         <Text style={subtitleTextStyles}>Home</Text>
                     </View>
-                    <View style={styles.actionsContainer}>
-                        <Ionicons name="md-more" size={24} color="white"/>
-                    </View>
                 </View>
             </TouchableNativeFeedback> 
         )
@@ -65,11 +62,7 @@ const styles = StyleSheet.create({
         fontSize: 16,
         fontWeight: 'bold',
         color: 'white'
-    },
-    actionsContainer: {
-        flexGrow: 0,
-        padding: 24
-    },
+    }
 })
 
 export default connect(null, { makeActiveDevice })(ListItem)

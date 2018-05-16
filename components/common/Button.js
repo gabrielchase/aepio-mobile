@@ -20,7 +20,7 @@ const Button = ({ onPress, loading, children }) => {
 
   return (
     <TouchableNativeFeedback onPress={onPress}>
-      <View style={buttonStyle}>
+      <View style={buttonStyle} pointerEvents='box-only'>
         { inner }
       </View>
     </TouchableNativeFeedback>
