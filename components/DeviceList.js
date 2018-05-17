@@ -105,7 +105,7 @@ class DeviceList extends Component {
                     </Svg>
                 </Animated.View>
 
-                <View style={{ position: 'absolute', bottom: 24, right: 24, width: 64, height: 64, borderRadius: 32, overflow: 'hidden', backgroundColor: 'white', zIndex: 100, elevation: 15 }}>
+                <View style={{ position: 'absolute', bottom: 24, right: 24, width: 64, height: 64, borderRadius: 32, overflow: 'hidden', backgroundColor: 'white', zIndex: 100, elevation: 5 }}>
                     <TouchableNativeFeedback onPress={() => Actions.deviceDetail({ deviceId: id })}>
                         <View style={{ padding: 16 }}><Feather name="list" size={32} color="#D46047"/></View>
                     </TouchableNativeFeedback>
@@ -122,7 +122,7 @@ class DeviceList extends Component {
         const { activeDevice } = this.props
         return (
             <View style={{ flex: 1, flexDirection: 'column' }}>
-                <View style={{ position: 'absolute', top: 36, right: 12, width: 64, height: 64, borderRadius: 32, overflow: 'hidden', backgroundColor: 'white', zIndex: 100, elevation: 15 }}>
+                <View style={{ position: 'absolute', top: 36, right: 12, width: 64, height: 64, borderRadius: 32, overflow: 'hidden', backgroundColor: 'white', zIndex: 100, elevation: 5 }}>
                     <TouchableNativeFeedback onPress={() => Actions.userEditForm()}>
                         <View style={{ padding: 19 }}><Feather name="settings" size={24} color="#D46047"/></View>
                     </TouchableNativeFeedback>

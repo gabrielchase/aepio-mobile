@@ -22,6 +22,10 @@ class DeviceDetail extends Component {
         this.timer = setInterval(() => this.props.fetchDevice(deviceId, token), READING_INTERVAL)
     }
 
+    componentWillUnmount() {
+        clearInterval(this.timer)
+    }
+
     renderReadings(readings) {
         let renderReadings = []
         for (let reading of readings) {
