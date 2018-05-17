@@ -1,6 +1,9 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { Text, View } from 'react-native'
+import { Text, View, ActivityIndicator, ScrollView, TouchableNativeFeedback } from 'react-native'
+import { LinearGradient } from 'expo'
+import { Feather } from '@expo/vector-icons'
+import { Actions } from 'react-native-router-flux'
 
 import { Card, CardSection } from './common'
 import { fetchDevice } from '../actions'
@@ -52,14 +55,34 @@ class DeviceDetail extends Component {
         const deviceId = id
 
         if (!readings.length) {
-            return (<View><Text></Text></View>)
+            return (
+                <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+                    <ActivityIndicator size={48} color='#D46047'/>
+                </View>
+            )
         }
 
         return (
             <View>
-                <Text> Device {deviceId} Readings </Text>
-                <Text> {name} </Text>
-                {readings ? this.renderReadings(readings) : <Card></Card>}
+                <LinearGradient
+                    colors={['#D46047', '#EAB56B']}
+                    style={{ height: '100%', width: '100%', justifyContent: 'center' }}>
+
+                    <View style={{ flexGrow: 0, flexDirection: 'row', marginTop: 24 }}>
+                        <View style={{ flexGrow: 0 }}>
+                            <TouchableNativeFeedback onPress={() => { Actions.deviceList() }}>
+                                <View style={{ padding: 16 }} pointerEvents='box-only'>
+                                    <Feather name="arrow-left" size={24} color='white' />
+                                </View>
+                            </TouchableNativeFeedback>
+                        </View>
+                        <Text style={{ flex: 1, padding: 16, fontSize: 20, fontWeight: '700', color: 'white' }}>Device {deviceId} Readings</Text>
+                    </View>
+
+                    <ScrollView style={{ flex: 1, padding: 16 }}>
+                        {this.renderReadings(readings)}
+                    </ScrollView>
+                </LinearGradient>
             </View>
         )
     }
